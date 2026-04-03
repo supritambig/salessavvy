@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: salessavvy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: salessavvy
+  template:
+    metadata:
+      labels:
+        app: salessavvy
+    spec:
+      containers:
+        - name: salessavvy
+          image: suprit43/salessavvy:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: salessavvy
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-service:3306/sales_savvy?createDatabaseIfNotExist=true
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "root"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+            - name: JWT_SECRET
+              value: "your-very-long-secure-secret-key-for-production-12345678901234567890"
+            - name: RAZORPAY_KEY_ID
+              value: "rzp_test_LqWBBDbgwot5lh"
+            - name: RAZORPAY_KEY_SECRET
+              value: "NETk6HP1NzRzufOYZ7KYfDMb"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: salessavvy-service
+spec:
+  type: NodePort
+  selector:
+    app: salessavvy
+  ports:
+    - name: http
+      port: 9090
+      targetPort: 9090
+      nodePort: 30090
