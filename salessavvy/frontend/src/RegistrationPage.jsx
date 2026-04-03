@@ -1,7 +1,6 @@
 // RegistrationPage.jsx
-import React, { useState } from 'react-router-dom';
+import React, { useState } from 'react';
 import './assets/styles.css';
-import { useNavigate } from 'react-router-dom';
 
 export default function RegistrationPage() {
   const [username, setUsername] = useState('');
