@@ -1,5 +1,5 @@
 # ============================================================
-# Stage 1: Build React frontend + Spring Boot backend in one go
+# Stage 1: Build React frontend + Spring Boot backend
 # ============================================================
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 
@@ -11,25 +11,26 @@ RUN apt-get update && apt-get install -y curl && \
 
 WORKDIR /build
 
-# Cache Maven dependencies first
+# Cache Maven dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline -q || true
 
-# Copy source (backend + frontend)
+# Copy source
 COPY src ./src
 COPY frontend ./frontend
 
-# 🔥 IMPORTANT: install frontend deps manually
-RUN cd frontend && npm install
+# 🔥 Build frontend manually
+RUN cd frontend && npm install && npm run build
 
-# 🔥 FIX: give execute permission to vite
-RUN chmod -R +x frontend/node_modules/.bin
-# Build everything: Maven will invoke frontend-maven-plugin to build React,
-# then copy dist/ into static/, then package the JAR
+# 🔥 Copy React build into Spring Boot
+RUN mkdir -p src/main/resources/static && \
+    cp -r frontend/dist/* src/main/resources/static/
+
+# Build Spring Boot
 RUN mvn clean package -DskipTests
 
 # ============================================================
-# Stage 2: Minimal runtime image
+# Stage 2: Runtime
 # ============================================================
 FROM eclipse-temurin:17-jre-alpine
 
