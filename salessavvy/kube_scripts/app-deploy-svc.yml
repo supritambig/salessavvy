@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: salessavvy
-          image: suprit43/salessavvy:latest
+          image: suprit43/spring-boot-app:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
