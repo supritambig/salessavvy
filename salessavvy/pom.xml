@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>salessavvy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <n>salessavvy</n>
+    <name>salessavvy</name>
     <description>SalesSavvy - Full Stack E-Commerce (Spring Boot + React, Single JAR)</description>
 
     <properties>
