@@ -19,6 +19,11 @@ RUN mvn dependency:go-offline -q || true
 COPY src ./src
 COPY frontend ./frontend
 
+# 🔥 IMPORTANT: install frontend deps manually
+RUN cd frontend && npm install
+
+# 🔥 FIX: give execute permission to vite
+RUN chmod -R +x frontend/node_modules/.bin
 # Build everything: Maven will invoke frontend-maven-plugin to build React,
 # then copy dist/ into static/, then package the JAR
 RUN mvn clean package -DskipTests
