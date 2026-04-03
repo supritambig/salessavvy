@@ -21,7 +21,7 @@ COPY frontend ./frontend
 
 # Build everything: Maven will invoke frontend-maven-plugin to build React,
 # then copy dist/ into static/, then package the JAR
-RUN mvn clean package -DskipTests -q
+RUN mvn clean package -DskipTests
 
 # ============================================================
 # Stage 2: Minimal runtime image
